@@ -1,0 +1,17 @@
+﻿@model IEnumerable<WorkoutTracker.Models.Exercise>
+
+@foreach (var exercise in Model)
+{
+    <div>
+        <h2>@exercise.Name</h2>
+        <img src="@exercise.GifUrl" alt="@exercise.Name" />
+        <p>Target Muscles: @string.Join(", ", exercise.TargetMuscles)</p>
+        <p>Body Parts: @string.Join(", ", exercise.BodyParts)</p>
+        <p>Equipments: @string.Join(", ", exercise.Equipments)</p>
+        <p>Secondary Muscles: @string.Join(", ", exercise.SecondaryMuscles)</p>
+        <p>Instructions: @string.Join(", ", exercise.Instructions)</p>
+    </div>
+    <hr />
+}
+
+

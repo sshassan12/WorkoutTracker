@@ -1,0 +1,50 @@
+﻿@model WorkoutTracker.Models.Workout
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <div class="col-sm-2 font-weight-bold">
+            Workout Start
+        </div>
+        <div class="col-sm-4">
+            @Model.WorkoutStart.ToString("g") <!-- Formatted date and time -->
+        </div>
+        <div class="col-sm-2 font-weight-bold">
+            Workout End
+        </div>
+        <div class="col-sm-4">
+            @Model.WorkoutEnd.ToString("g") <!-- Formatted date and time -->
+        </div>
+    </dl>
+    <hr />
+    <div>
+        @if (Model.WorkoutExercises != null && Model.WorkoutExercises.Any())
+        {
+            <ul class="list-group">
+                @foreach (var exercise in Model.WorkoutExercises)
+                {
+                    <li class="list-group-item">
+                        <strong>@exercise.ExerciseName</strong>: @exercise.Count times
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No exercises added for this workout.</p>
+        }
+    </div>
+    <hr />
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        <button type="button" class="btn btn-secondary" onclick="location.href='@Url.Action("Index")'">Back to List</button>
+    </form>
+</div>

@@ -1,0 +1,148 @@
+﻿@model WorkoutTracker.Models.Workout
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Workout</h4>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Workout Fields -->
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <label class="control-label">Workout Start Date and Time</label>
+                    <input asp-for="WorkoutStart" class="form-control" />
+                    <span asp-validation-for="WorkoutStart" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="control-label">Workout End Date and Time</label>
+                    <input asp-for="WorkoutEnd" class="form-control" />
+                    <span asp-validation-for="WorkoutEnd" class="text-danger"></span>
+                </div>
+                <input type="hidden" id="workoutId" value="@Model.Id" />
+            </div>
+
+                <h4>Exercises</h4>
+                <div id="exerciseList">
+                    @if (Model.WorkoutExercises != null && Model.WorkoutExercises.Any())
+                    {
+                        @foreach (var exercise in Model.WorkoutExercises)
+                        {
+                            <div class="form-group row exercise-row">
+                                <input type="hidden" name="WorkoutExercises[@exercise].Id" value="@exercise.Id" />
+                                <div class="col-md-6">
+                                    <select name="WorkoutExercises[][ExerciseName]" class="form-control">
+                                        <option value="Push Ups">Push Ups</option>
+                                        <option value="Sit Ups">Sit Ups</option>
+                                        <option value="Jumping Jacks">Jumping Jacks</option>
+                                        <option value="Squats">Squats</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="number" name="WorkoutExercises[][Count]" class="form-control" value="@exercise.Count" />
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-danger btn-sm remove-exercise">Remove</button>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <select id="exerciseName" class="form-control">
+                            <option value="">Select an exercise</option>
+                            <option value="Push Ups">Push Ups</option>
+                            <option value="Sit Ups">Sit Ups</option>
+                            <option value="Jumping Jacks">Jumping Jacks</option>
+                            <option value="Squats">Squats</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="number" id="exerciseCount" class="form-control" placeholder="Count (e.g., 30)" />
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-primary" id="addExercise">Add Exercise</button>
+                    </div>
+                </div>
+
+                <div class="form-group mt-3">
+                    <input type="submit" value="Edit" class="btn btn-primary" />
+                </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<script>
+    document.getElementById("addExercise").addEventListener("click", function () {
+        const exerciseName = document.getElementById("exerciseName").value;
+        const exerciseCount = document.getElementById("exerciseCount").value;
+
+        if (!exerciseName || !exerciseCount || exerciseCount <= 0) {
+            alert("Please select a valid exercise and enter a count greater than 0.");
+            return;
+        }
+
+        const exerciseList = document.getElementById("exerciseList");
+
+        // Calculate next index based on existing form inputs
+        const existingInputs = exerciseList.querySelectorAll('input[name^="WorkoutExercises"]');
+        const index = existingInputs.length / 2; // Assumes each exercise has 2 inputs (WorkoutId and Count)
+
+        const exerciseRow = document.createElement("div");
+        exerciseRow.className = "form-group row exercise-row";
+
+        exerciseRow.innerHTML = `
+            <input type="hidden" name="WorkoutExercises[${index}].Id" value="0" /> <!-- New exercise -->
+            <div class="col-md-6">
+                <select name="WorkoutExercises[${index}].ExerciseName" class="form-control">
+                    <option value="Push Ups" ${exerciseName === "Push Ups" ? "selected" : ""}>Push Ups</option>
+                    <option value="Sit Ups" ${exerciseName === "Sit Ups" ? "selected" : ""}>Sit Ups</option>
+                    <option value="Jumping Jacks" ${exerciseName === "Jumping Jacks" ? "selected" : ""}>Jumping Jacks</option>
+                    <option value="Squats" ${exerciseName === "Squats" ? "selected" : ""}>Squats</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <input type="number" name="WorkoutExercises[${index}].Count" class="form-control" value="${exerciseCount}" />
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-danger btn-sm remove-exercise">Remove</button>
+            </div>
+        `;
+
+        exerciseList.appendChild(exerciseRow);
+
+        // Reset input fields
+        document.getElementById("exerciseName").value = "";
+        document.getElementById("exerciseCount").value = "";
+
+        // Add event listener for remove button
+        exerciseRow.querySelector(".remove-exercise").addEventListener("click", function () {
+            exerciseList.removeChild(exerciseRow);
+            updateIndices(); // Recalculate indices after removal
+        });
+    });
+
+    // Update indices dynamically
+    function updateIndices() {
+        const exerciseRows = document.querySelectorAll(".exercise-row");
+        exerciseRows.forEach((row, newIndex) => {
+            row.querySelectorAll("input, select").forEach((input) => {
+                const name = input.name;
+                if (name) {
+                    input.name = name.replace(/\[\d+\]/, `[${newIndex}]`);
+                }
+            });
+        });
+    }
+</script>

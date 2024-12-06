@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Workout Tracker - Home";
+}
+
+<div class="d-flex justify-content-center">
+    <div class="jumbotron text-center">
+        <h1 class="display-4">Welcome to Workout Tracker!</h1>
+        <p class="lead">This is your one-stop solution to track and manage your workouts and exercises.</p>
+        <hr class="my-4">
+        <p>Get started by exploring the workouts and exercises available.</p>
+        <a class="btn btn-primary btn-lg" asp-area="" asp-controller="Workouts" asp-action="Index" role="button">View Workouts</a>
+        <a class="btn btn-secondary btn-lg" asp-area="" asp-controller="ConsumeAPI" asp-action="Index" role="button">View Exercises</a>
+    </div>
+</div>

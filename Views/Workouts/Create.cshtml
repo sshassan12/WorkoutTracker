@@ -1,0 +1,122 @@
+﻿@model WorkoutTracker.Models.Workout
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Workout</h4>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Workout Fields -->
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <label class="control-label">Workout Start Date and Time</label>
+                    <input asp-for="WorkoutStart" class="form-control" />
+                    <span asp-validation-for="WorkoutStart" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="control-label">Workout End Date and Time</label>
+                    <input asp-for="WorkoutEnd" class="form-control" />
+                    <span asp-validation-for="WorkoutEnd" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-- Exercises Section -->
+            <h4>Exercises</h4>
+            <div id="exerciseList">
+                <!-- Dynamically added exercises will appear here -->
+            </div>
+            <div id="addExerciseSection" class="form-group row">
+                <div class="col-md-6">
+                    <select id="exerciseName" class="form-control">
+                        <option value="">Select an exercise</option>
+                        <option value="Push Ups">Push Ups</option>
+                        <option value="Sit Ups">Sit Ups</option>
+                        <option value="Squats">Squats</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <input type="number" id="exerciseCount" class="form-control" placeholder="Count (e.g., 30)" />
+                </div>
+                <div>
+                    <button type="button" class="btn btn-primary" id="addExercise">Add Exercise</button>
+                </div>
+            </div>
+
+            <div class="form-group mt-3">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <button type="button" class="btn btn-secondary" onclick="location.href='@Url.Action("Index")'">Back to List</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById("addExercise").addEventListener("click", function () {
+        const exerciseList = document.getElementById("exerciseList");
+        const exerciseSelect = document.getElementById("exerciseName");
+        const exerciseName = exerciseSelect.value;
+        const exerciseCount = document.getElementById("exerciseCount").value;
+
+        if (!exerciseName || exerciseCount <= 0) {
+            alert("Please enter a valid exercise name and a positive count.");
+            return;
+        }
+
+        // Create new exercise input row
+        const index = exerciseList.children.length;
+        const exerciseRow = document.createElement("div");
+        exerciseRow.className = "form-group row";
+
+        exerciseRow.innerHTML = `
+                <input type="hidden" name="WorkoutExercises[${index}].WorkoutId" value="0" />
+                <div class="col-md-6">
+                    <input type="text" name="WorkoutExercises[${index}].ExerciseName" class="form-control" value="${exerciseName}" readonly />
+                </div>
+                <div class="col-md-4">
+                    <input type="number" name="WorkoutExercises[${index}].Count" class="form-control" value="${exerciseCount}" readonly />
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-danger btn-sm remove-exercise">Remove</button>
+                </div>
+            `;
+
+        // Add the row to the list
+        exerciseList.appendChild(exerciseRow);
+
+        // Remove the selected option from the dropdown
+        const selectedOption = exerciseSelect.querySelector(`option[value="${exerciseName}"]`);
+        if (selectedOption) {
+            exerciseSelect.removeChild(selectedOption);
+        }
+
+        // Clear inputs
+        exerciseSelect.value = "";
+        document.getElementById("exerciseCount").value = "";
+
+        // Hide the "Add Exercise" section if no more exercises are available
+        if (exerciseSelect.options.length <= 1) {
+            document.getElementById("addExerciseSection").style.display = "none";
+        }
+
+        // Add event listener for remove button
+        exerciseRow.querySelector(".remove-exercise").addEventListener("click", function () {
+            exerciseList.removeChild(exerciseRow);
+
+            // Add the removed option back to the dropdown
+            const newOption = document.createElement("option");
+            newOption.value = exerciseName;
+            newOption.textContent = exerciseName;
+            exerciseSelect.appendChild(newOption);
+
+            // Show the "Add Exercise" section if it's hidden
+            document.getElementById("addExerciseSection").style.display = "";
+        });
+    });
+</script>

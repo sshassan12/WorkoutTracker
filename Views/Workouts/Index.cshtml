@@ -1,0 +1,50 @@
+﻿@model IEnumerable<WorkoutTracker.Models.Workout>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Workouts</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Workout Start Time</th>
+            <th>Workout End Time</th>
+            <th>Exercises</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var workout in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => workout.WorkoutStart)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => workout.WorkoutEnd)
+                </td>
+                <td>
+                    <ul>
+                        @foreach (var exercise in workout.WorkoutExercises)
+                        {
+                            <li>
+                                @exercise.ExerciseName: @exercise.Count times
+                            </li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    <!-- <a asp-action="Edit" asp-route-id="@workout.Id">Edit</a> | -->
+                    <a asp-action="Details" asp-route-id="@workout.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@workout.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

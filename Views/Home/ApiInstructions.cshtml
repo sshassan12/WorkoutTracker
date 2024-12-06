@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "API Instructions";
+}
+
+
+
+<div class="container">
+    <h1 class="display-4">Public Workout API Instructions</h1>
+    <p class="lead">Welcome to the Workout Tracker Public API. Below are the instructions on how to use the API to access workout data.</p>
+    <hr class="my-4">
+
+    <h2>Endpoints</h2>
+    <ul>
+
+        <li>
+            <strong>Get All Workouts:</strong>
+            <p>URL: <code>https://workouttracker-abakfccdaye5huge.westus-01.azurewebsites.net/api/PublicWorkoutAPI/workouts</code></p>
+            <p>Method: <code>GET</code></p>
+            <p>Description: This endpoint returns a list of all workouts, including their exercises.</p>
+            <pre><code>curl -X GET "https://workouttracker-abakfccdaye5huge.westus-01.azurewebsites.net/api/PublicWorkoutAPI/workouts"</code></pre>
+        </li>
+
+    </ul>
+
+    <h2>Usage Examples</h2>
+    <p>Here are some examples of how to use the API endpoints:</p>
+    <h3>Using Postman</h3>
+    <ol>
+        <li>Open Postman.</li>
+        <li>Create a new request.</li>
+        <li>Set the request method to <code>GET</code>.</li>
+        <li>Enter the URL for the endpoint you want to access (e.g., <code>https://workouttracker-abakfccdaye5huge.westus-01.azurewebsites.net/api/PublicWorkoutAPI/workouts</code>).</li>
+        <li>Click the <code>Send</code> button to send the request and view the response.</li>
+    </ol>
+
+    <h3>Using cURL</h3>
+    <p>To get all workouts:</p>
+    <pre><code>curl -X GET "https://workouttracker-abakfccdaye5huge.westus-01.azurewebsites.net/api/PublicWorkoutAPI/workouts"</code></pre>
+    <p>To get a specific workout by ID:</p>
+    <pre><code>curl -X GET "https://workouttracker-abakfccdaye5huge.westus-01.azurewebsites.net/api/PublicWorkoutAPI/workouts/1"</code></pre>
+</div>
+

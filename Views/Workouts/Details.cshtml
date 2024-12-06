@@ -1,0 +1,50 @@
+﻿@model WorkoutTracker.Models.Workout
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Workout Details</h1>
+
+<div>
+    <hr />
+    <div class="row">
+        <div class="col-sm-2 font-weight-bold">
+            Workout Start
+        </div>
+        <div class="col-sm-4">
+            @Model.WorkoutStart.ToString("g") <!-- Formatted date and time -->
+        </div>
+        <div class="col-sm-2 font-weight-bold">
+            Workout End
+        </div>
+        <div class="col-sm-4">
+            @Model.WorkoutEnd.ToString("g") <!-- Formatted date and time -->
+        </div>
+    </div>
+
+    <hr />
+    <div>
+        @if (Model.WorkoutExercises != null && Model.WorkoutExercises.Any())
+        {
+            <ul class="list-group">
+                @foreach (var exercise in Model.WorkoutExercises)
+                {
+                    <li class="list-group-item">
+                        <strong>@exercise.ExerciseName</strong>: @exercise.Count times
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No exercises added for this workout.</p>
+        }
+    </div>
+</div>
+
+<div>
+    <br />
+    <!-- <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a> -->
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
